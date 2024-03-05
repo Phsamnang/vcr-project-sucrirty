@@ -1,6 +1,6 @@
 package com.kosign.vcrprojectsecurity.payload.product;
 
-import com.vcr.vcr_project.enums.Currency;
+import com.kosign.vcrprojectsecurity.enums.Currency;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
