@@ -1,6 +1,5 @@
-package com.kosign.vcrprojectsecurity.controller.auth;
+package com.kosign.vcrprojectsecurity.controller;
 
-import com.kosign.vcrprojectsecurity.controller.VCRRestController;
 import com.kosign.vcrprojectsecurity.payload.auth.AuthRequest;
 import com.kosign.vcrprojectsecurity.payload.auth.LoginRequest;
 import com.kosign.vcrprojectsecurity.service.auth.IAuthService;

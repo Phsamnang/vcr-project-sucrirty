@@ -154,7 +154,8 @@ public enum StatusCode {
     SEND_OTP_FAILED(503, "sent otp failed"),
     INVOICE_NO_EXIST(403, "Invoice no exist"),
     TRIAL_VERSION(400, "Trial version" ),
-    DUPLICATE_MONTH(400,"Month cannot duplicate" );
+    DUPLICATE_MONTH(400,"Month cannot duplicate" ),
+    PRODUCT_NOT_FOUND(404,"Product not found");
 
     private final String message;
     private final int code;

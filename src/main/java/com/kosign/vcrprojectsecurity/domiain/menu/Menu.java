@@ -31,7 +31,6 @@ public class Menu {
     private List<MenuDetail>menuDetails=new ArrayList<>();
 
     @Builder
-
     public Menu(Category category, String name, BigDecimal price, BigDecimal usd, String image) {
         this.category = category;
         this.name = name;

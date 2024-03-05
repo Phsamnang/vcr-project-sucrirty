@@ -40,6 +40,8 @@ dependencies {
 	implementation 'javax.xml.bind:jaxb-api:2.4.0-b180830.0359'
 	// https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
 	implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
+// https://mvnrepository.com/artifact/com.google.firebase/firebase-admin
+	implementation group: 'com.google.firebase', name: 'firebase-admin', version: '9.2.0'
 
 }
 

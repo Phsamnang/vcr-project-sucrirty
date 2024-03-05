@@ -1,5 +1,6 @@
 package com.kosign.vcrprojectsecurity.domiain.Import;
 
+import com.kosign.vcrprojectsecurity.domiain.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,4 +30,7 @@ public class ImportProduct {
     private BigDecimal importUsdTotal=BigDecimal.valueOf(0);
     @OneToMany(mappedBy = "importProduct",fetch = FetchType.LAZY)
     private List<ImportDetail> importDetails=new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }
