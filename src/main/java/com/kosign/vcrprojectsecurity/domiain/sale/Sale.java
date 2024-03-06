@@ -2,6 +2,7 @@ package com.kosign.vcrprojectsecurity.domiain.sale;
 
 
 import com.kosign.vcrprojectsecurity.domiain.table.TableSale;
+import com.kosign.vcrprojectsecurity.domiain.user.User;
 import com.kosign.vcrprojectsecurity.enums.SaleStatus;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -32,7 +33,9 @@ public class Sale {
     @ManyToOne
     @JoinColumn(name = "table_id", referencedColumnName = "id")
     private TableSale tableSale;
-
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
     @OneToMany(mappedBy = "sale", fetch = FetchType.EAGER)
     private List<SaleDetail> saleDetails = new ArrayList<>();
 

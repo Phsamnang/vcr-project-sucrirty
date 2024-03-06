@@ -1,21 +1,22 @@
 package com.kosign.vcrprojectsecurity.service.sale;
 
-import com.vcr.vcr_project.enums.SaleStatus;
-import com.vcr.vcr_project.enums.TableStatus;
-import com.vcr.vcr_project.exception.EntityNotFoundException;
-import com.vcr.vcr_project.model.menu.Menu;
-import com.vcr.vcr_project.model.menu.MenuRepository;
-import com.vcr.vcr_project.model.sale.Sale;
-import com.vcr.vcr_project.model.sale.SaleDetail;
-import com.vcr.vcr_project.model.sale.SaleDetailRepository;
-import com.vcr.vcr_project.model.sale.SaleRepository;
-import com.vcr.vcr_project.model.stock.StockRepository;
-import com.vcr.vcr_project.model.table.TableSale;
-import com.vcr.vcr_project.model.table.TableSaleRepository;
-import com.vcr.vcr_project.payload.sale.SaleDetailRequest;
-import com.vcr.vcr_project.payload.sale.SaleDetailResponse;
-import com.vcr.vcr_project.payload.sale.SaleRequest;
-import com.vcr.vcr_project.payload.sale.SaleResponse;
+
+import com.kosign.vcrprojectsecurity.domiain.menu.Menu;
+import com.kosign.vcrprojectsecurity.domiain.menu.MenuRepository;
+import com.kosign.vcrprojectsecurity.domiain.sale.Sale;
+import com.kosign.vcrprojectsecurity.domiain.sale.SaleDetail;
+import com.kosign.vcrprojectsecurity.domiain.sale.SaleDetailRepository;
+import com.kosign.vcrprojectsecurity.domiain.sale.SaleRepository;
+import com.kosign.vcrprojectsecurity.domiain.stock.StockRepository;
+import com.kosign.vcrprojectsecurity.domiain.table.TableSale;
+import com.kosign.vcrprojectsecurity.domiain.table.TableSaleRepository;
+import com.kosign.vcrprojectsecurity.enums.SaleStatus;
+import com.kosign.vcrprojectsecurity.enums.TableStatus;
+import com.kosign.vcrprojectsecurity.exception.EntityNotFoundException;
+import com.kosign.vcrprojectsecurity.payload.sale.SaleDetailRequest;
+import com.kosign.vcrprojectsecurity.payload.sale.SaleDetailResponse;
+import com.kosign.vcrprojectsecurity.payload.sale.SaleRequest;
+import com.kosign.vcrprojectsecurity.payload.sale.SaleResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

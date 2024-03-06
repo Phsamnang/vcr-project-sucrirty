@@ -8,7 +8,9 @@ import com.kosign.vcrprojectsecurity.domiain.Import.ImportProductRepository;
 import com.kosign.vcrprojectsecurity.domiain.product.Product;
 import com.kosign.vcrprojectsecurity.domiain.product.ProductRepository;
 import com.kosign.vcrprojectsecurity.domiain.stock.StockRepository;
+import com.kosign.vcrprojectsecurity.domiain.user.UserRepository;
 import com.kosign.vcrprojectsecurity.exception.EntityNotFoundException;
+import com.kosign.vcrprojectsecurity.helper.AuthHelper;
 import com.kosign.vcrprojectsecurity.payload.importDetial.ImportDetailMainResponse;
 import com.kosign.vcrprojectsecurity.payload.importDetial.ImportDetailRequest;
 import com.kosign.vcrprojectsecurity.payload.importDetial.ImportDetailResponse;
@@ -27,10 +29,14 @@ public class ImportProductService implements IImportProductService {
     private final ImportDetailRepository importDetailRepository;
     private final ProductRepository productRepository;
     private final StockRepository stockRepository;
+    private final UserRepository userRepository;
 
     @Override
     public void createImportProduct() {
-        importProductRepository.save(new ImportProduct());
+        var email = AuthHelper.getUsername();
+        var user = userRepository.findByEmail(email).get();
+
+        importProductRepository.save(ImportProduct.builder().user(user).build());
     }
 
     @Override
@@ -41,6 +47,7 @@ public class ImportProductService implements IImportProductService {
         var amount = payload.importPrice().multiply(BigDecimal.valueOf(payload.importQty()));
         var addTotoTal = importProduct.getImportTotal().add(amount);
         var stock=stockRepository.findByProduct(product);
+
         if (importDeatail.isPresent()) {
             var newQty = importDeatail.get().getImportQty() + payload.importQty();
             importDeatail.get().setImportQty(newQty);

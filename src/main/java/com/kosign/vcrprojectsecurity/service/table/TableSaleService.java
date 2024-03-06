@@ -1,8 +1,9 @@
 package com.kosign.vcrprojectsecurity.service.table;
 
-import com.vcr.vcr_project.model.table.TableSale;
-import com.vcr.vcr_project.model.table.TableSaleRepository;
-import com.vcr.vcr_project.payload.table.TableRequest;
+
+import com.kosign.vcrprojectsecurity.domiain.table.TableSale;
+import com.kosign.vcrprojectsecurity.domiain.table.TableSaleRepository;
+import com.kosign.vcrprojectsecurity.payload.table.TableRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

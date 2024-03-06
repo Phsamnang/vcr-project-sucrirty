@@ -2,6 +2,7 @@ package com.kosign.vcrprojectsecurity.domiain.Import;
 
 import com.kosign.vcrprojectsecurity.domiain.user.User;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -33,4 +34,9 @@ public class ImportProduct {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @Builder
+    public ImportProduct(User user) {
+        this.user = user;
+    }
 }
