@@ -3,7 +3,7 @@ package com.kosign.vcrprojectsecurity.service.attendance;
 import com.kosign.vcrprojectsecurity.common.api.StatusCode;
 import com.kosign.vcrprojectsecurity.domiain.attendance.Attendance;
 import com.kosign.vcrprojectsecurity.domiain.attendance.AttendanceRepository;
-import com.kosign.vcrprojectsecurity.domiain.user.UserRepository;
+import com.kosign.vcrprojectsecurity.domiain.employee.EmployeeRepository;
 import com.kosign.vcrprojectsecurity.enums.AttendanceStatus;
 import com.kosign.vcrprojectsecurity.exception.BusinessException;
 import com.kosign.vcrprojectsecurity.payload.attendance.AttendanceResponse;
@@ -17,14 +17,14 @@ import java.time.LocalTime;
 @RequiredArgsConstructor
 public class AttendanceService implements IAttendanceService{
     private final AttendanceRepository attendanceRepository;
-    private final UserRepository userRepository;
+    private final EmployeeRepository employeeRepository;
     @Override
     public void checkIn(Long userId) {
-      var user=userRepository.findById(userId).orElseThrow(()->new BusinessException(StatusCode.NOT_FOUND));
+        var employee = employeeRepository.findById(userId).orElseThrow(() -> new BusinessException(StatusCode.NOT_FOUND));
       attendanceRepository.save(
               Attendance.builder().date(LocalDate.now())
                       .checkIn(LocalTime.now())
-                      .user(user)
+                      .employee(employee)
                       .status(AttendanceStatus.PRESENT.getDescription())
                       .build()
       );
@@ -32,23 +32,19 @@ public class AttendanceService implements IAttendanceService{
 
     @Override
     public void checkOut(Long userId) {
-        var user=userRepository.findById(userId).orElseThrow(()->new BusinessException(StatusCode.NOT_FOUND));
-        var attendance=attendanceRepository.findByUserAndDate(user,LocalDate.now());
-        if (attendance.isPresent()){
-            attendance.get().setCheckOut(LocalTime.now());
-        }
-        attendanceRepository.save(attendance.get());
+        var attendance = attendanceRepository.findByEmployee_IdAndDate(userId, LocalDate.now());
+        attendance.setCheckOut(LocalTime.now());
+        attendanceRepository.save(attendance);
     }
 
     @Override
     public AttendanceResponse getAttendanceInfo(Long userId) {
-        var user=userRepository.findById(userId).orElseThrow(()->new BusinessException(StatusCode.NOT_FOUND));
-        var attendance=attendanceRepository.findByUserAndDate(user,LocalDate.now()).orElseThrow(()->new BusinessException(StatusCode.NOT_FOUND));
+        var attendance = attendanceRepository.findByEmployeeId(userId);
         return AttendanceResponse.builder()
                 .checkin(attendance.getCheckIn())
                 .checkOut(attendance.getCheckOut())
                 .date(attendance.getDate())
-                .name(attendance.getUser().getFirstName())
+                .name(attendance.getEmployee().getName())
                 .status(attendance.getStatus())
                 .build();
     }
