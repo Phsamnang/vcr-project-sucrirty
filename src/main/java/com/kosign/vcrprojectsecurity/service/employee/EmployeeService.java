@@ -6,6 +6,8 @@ import com.kosign.vcrprojectsecurity.payload.employee.EmployeeRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class EmployeeService implements IEmployee{
@@ -15,5 +17,9 @@ public class EmployeeService implements IEmployee{
        employeeRepository.save(
                Employee.builder().name(request.name()).salary(request.salary()).build()
        );
+    }
+    @Override
+    public List<Employee> getAllEmployees() {
+        return employeeRepository.findAll();
     }
 }
