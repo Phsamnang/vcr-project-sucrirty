@@ -19,10 +19,13 @@ public class Employee {
     private Long id;
     private String name;
     private BigDecimal salary;
+    private String image;
 
     @Builder
-    public Employee(String name, BigDecimal salary) {
+
+    public Employee(String name, BigDecimal salary, String image) {
         this.name = name;
         this.salary = salary;
+        this.image = image;
     }
 }

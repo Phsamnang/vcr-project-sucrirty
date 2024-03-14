@@ -32,14 +32,20 @@ public class AttendanceService implements IAttendanceService{
 
     @Override
     public void checkOut(Long userId) {
-        var attendance = attendanceRepository.findByEmployee_IdAndDate(userId, LocalDate.now());
+        var attendance = attendanceRepository.findByEmployee_IdAndDate(userId, LocalDate.now()).orElseThrow(()->new BusinessException(StatusCode.NOT_FOUND));
         attendance.setCheckOut(LocalTime.now());
         attendanceRepository.save(attendance);
     }
 
     @Override
     public AttendanceResponse getAttendanceInfo(Long userId) {
-        var attendance = attendanceRepository.findByEmployeeId(userId);
+        var employee=employeeRepository.findById(userId).get();
+        var attendance = attendanceRepository.findByEmployeeAndDate(employee,LocalDate.now());
+       // var attendance = attendanceRepository.findByEmployee_IdAndDate(userId,LocalDate.now()).get();
+
+    if (attendance==null){
+        return null;
+    }
         return AttendanceResponse.builder()
                 .checkin(attendance.getCheckIn())
                 .checkOut(attendance.getCheckOut())

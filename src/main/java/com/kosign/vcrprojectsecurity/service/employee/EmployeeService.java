@@ -4,6 +4,7 @@ import com.kosign.vcrprojectsecurity.domiain.employee.Employee;
 import com.kosign.vcrprojectsecurity.domiain.employee.EmployeeRepository;
 import com.kosign.vcrprojectsecurity.payload.employee.EmployeeRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class EmployeeService implements IEmployee{
     }
     @Override
     public List<Employee> getAllEmployees() {
-        return employeeRepository.findAll();
+        Sort sort = Sort.by(Sort.Direction.ASC, "id");
+        return employeeRepository.findAll(sort);
     }
 }
