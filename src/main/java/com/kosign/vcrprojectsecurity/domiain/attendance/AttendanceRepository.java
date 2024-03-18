@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -21,4 +22,6 @@ public interface AttendanceRepository extends JpaRepository<Attendance,Long> {
 
     Attendance findByEmployeeAndDate(Employee employee,LocalDate date);
 
+    @Query("select a from Attendance a where a.employee.id = ?1")
+    List<Attendance> findByEmployee_Id(Long id);
 }

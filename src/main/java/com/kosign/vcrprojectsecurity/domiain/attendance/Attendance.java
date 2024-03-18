@@ -14,6 +14,7 @@ import java.time.LocalTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class Attendance {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

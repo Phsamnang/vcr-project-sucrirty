@@ -25,4 +25,9 @@ public class AttendanceController extends VCRRestController {
     public ResponseEntity<?> getInfo(@PathVariable("userId") Long userId) {
         return ok(service.getAttendanceInfo(userId));
     }
+    @GetMapping("/details/{userId}")
+    public ResponseEntity<?> getAttendanceDetails(@PathVariable("userId") Long userId,@RequestParam("month") Integer m) {
+        return ok(service.getAttendanceDetail(userId,m));
+    }
+
 }

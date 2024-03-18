@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -53,5 +56,21 @@ public class AttendanceService implements IAttendanceService{
                 .name(attendance.getEmployee().getName())
                 .status(attendance.getStatus())
                 .build();
+    }
+
+    @Override
+    public List<AttendanceResponse> getAttendanceDetail(Long userId, Integer m) {
+        var attendance=attendanceRepository.findByEmployee_Id(userId);
+
+        List<AttendanceResponse> attendanceResponses=attendance.stream().filter(a->a.getDate().getYear()==LocalDate.now().getYear())
+                .filter(a->a.getDate().getMonth().getValue()==m)
+                .map(a->AttendanceResponse.builder()
+                        .status(a.getStatus())
+                        .name(a.getEmployee().getName())
+                        .status(a.getStatus())
+                        .date(a.getDate()).build()
+                ).collect(Collectors.toList());
+       // System.err.println(m);
+        return attendanceResponses;
     }
 }
