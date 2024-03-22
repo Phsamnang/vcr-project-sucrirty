@@ -11,10 +11,13 @@ import com.kosign.vcrprojectsecurity.domiain.product.ProductRepository;
 import com.kosign.vcrprojectsecurity.exception.EntityNotFoundException;
 import com.kosign.vcrprojectsecurity.payload.menu.MenuDetailRequest;
 import com.kosign.vcrprojectsecurity.payload.menu.MenuRequest;
+import com.kosign.vcrprojectsecurity.payload.menu.MenuResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -46,5 +49,21 @@ public class MenuService implements IMenuService {
                         .useProduct(payload.useProduct())
                         .build()
         );
+    }
+
+    @Override
+    public List<MenuResponse> getMenu(Long id) {
+        var menus = menuRepository.findAll();
+        List<MenuResponse> responses = menus.stream().filter(m -> m.getCategory().getId() == id)
+                .map(m -> {
+                    return MenuResponse.builder()
+                            .category(m.getCategory().getName())
+                            .name(m.getName())
+                            .rielPrice(m.getPrice())
+                            .usdPrice(m.getUsd())
+                            .image(m.getImage())
+                            .build();
+                }).collect(Collectors.toList());
+        return responses;
     }
 }

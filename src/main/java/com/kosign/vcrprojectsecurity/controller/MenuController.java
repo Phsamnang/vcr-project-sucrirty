@@ -5,10 +5,7 @@ import com.kosign.vcrprojectsecurity.payload.menu.MenuRequest;
 import com.kosign.vcrprojectsecurity.service.menu.IMenuService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,5 +21,10 @@ public class MenuController extends VCRRestController{
     public ResponseEntity<?>createMenuDetail(@RequestBody MenuDetailRequest payload){
         service.addMenuDetail(payload);
         return ok();
+    }
+
+    @GetMapping("/menu")
+    public ResponseEntity<?> getMenu(@RequestParam(name = "cate_id", defaultValue = "1") Long id) {
+        return ok(service.getMenu(id));
     }
 }

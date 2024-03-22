@@ -22,7 +22,7 @@ public class TableSale {
     private Long id;
     @Column(unique = true)
     private String name;
-    private String status = TableStatus.UNAVAILABLE.toString();
+    private String status = TableStatus.AVAILABLE.toString();
     @OneToMany(mappedBy = "tableSale")
     private List<Sale> sales = new ArrayList<>();
 

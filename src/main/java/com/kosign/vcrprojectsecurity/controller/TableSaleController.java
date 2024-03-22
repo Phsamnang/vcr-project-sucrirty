@@ -4,10 +4,7 @@ import com.kosign.vcrprojectsecurity.payload.table.TableRequest;
 import com.kosign.vcrprojectsecurity.service.table.ITableSaleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/v1")
@@ -18,5 +15,10 @@ public class TableSaleController extends VCRRestController{
     public ResponseEntity<?>createTable(@RequestBody TableRequest request) throws Throwable {
         service.createTable(request);
         return ok();
+    }
+    @GetMapping("/table")
+    public ResponseEntity<?>createTable() throws Throwable {
+
+        return ok(service.getAllTable());
     }
 }
