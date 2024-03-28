@@ -30,7 +30,7 @@ public class TableSaleService implements ITableSaleService{
         var t=tableSaleRepository.findAll(sort);
         List<TableResponse>responses=t.stream().map(table->{
             return TableResponse.builder().status(table.getStatus())
-                    .name(table.getName()).build();
+                    .name(table.getName()).id(table.getId()).build();
         }).collect(Collectors.toList());
         return responses;
     }

@@ -54,6 +54,10 @@ public class SaleService implements ISaleService {
                 builder().saleQty((int) request.qty())
                 .salePrice(menu.getPrice()).saleAmount(menu.getPrice().multiply(BigDecimal.valueOf(request.qty())))
                 .menu(menu).sale(sale).build());
+       var totalAmount=saleDetailRepository.getTotalAmount(sale);
+        System.err.println("total amount "+totalAmount);
+        sale.setSaleTotal(totalAmount);
+        saleRepository.save(sale);
         menu.getMenuDetails().stream().forEach(p -> {
             var stock = stockRepository.findByProduct(p.getProduct());
             stock.setNumber(stock.getNumber() - (p.getTotalUse() * request.qty()));
@@ -66,7 +70,9 @@ public class SaleService implements ISaleService {
     public SaleResponse getSaleByTable(Long tableId) {
         var table=tableSaleRepository.findById(tableId).orElseThrow(()->new EntityNotFoundException(TableSale.class,"Table not found"));
         var sale=saleRepository.findByTableSaleAndStatus(table, SaleStatus.UNPAID.toString());
-
+        if (sale == null) {
+            return null;
+        }
         List<SaleDetailResponse> saleDetailResponses=sale.getSaleDetails().stream().map(
                 s->SaleDetailResponse.builder().item(s.getMenu().getName()).QTY(s.getSaleQty())
                         .price(s.getSalePrice()).amount(s.getSaleAmount()).status(s.getStatus()).build()
