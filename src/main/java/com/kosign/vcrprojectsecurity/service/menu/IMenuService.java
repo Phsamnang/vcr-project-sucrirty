@@ -12,4 +12,6 @@ public interface IMenuService {
     void addMenuDetail(MenuDetailRequest payload);
 
     List<MenuResponse> getMenu(Long id);
+
+    List<MenuResponse> getMenuSale(Long id);
 }
