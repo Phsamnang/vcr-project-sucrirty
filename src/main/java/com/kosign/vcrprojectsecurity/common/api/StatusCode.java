@@ -1,7 +1,7 @@
 package com.kosign.vcrprojectsecurity.common.api;
 
 public enum StatusCode {
-
+    PRODUCT_NOT_ENOUGH(400, "Product is not enough"),
     SUCCESS(200, "Success"),
     USER_NOT_FOUND(453, "User is not found"),
     USER_DISABLED(453, "Biller account was deactivated. Please contact: 093 815 074"),

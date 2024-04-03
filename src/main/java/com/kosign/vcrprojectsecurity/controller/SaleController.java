@@ -29,4 +29,10 @@ public class SaleController extends VCRRestController {
     public ResponseEntity<?> getSaleBYTable(@PathVariable("id") Long tableId) {
         return ok(service.getSaleByTable(tableId));
     }
+
+    @DeleteMapping("/sale/table/item/{id}")
+    public ResponseEntity<?> removedItem(@PathVariable("id") Long id) {
+        service.removedOrder(id);
+        return ok();
+    }
 }

@@ -10,4 +10,5 @@ public interface ISaleService {
 
     void createOrder(SaleDetailRequest request);
     SaleResponse getSaleByTable(Long tableId);
+    void removedOrder(Long id);
 }
