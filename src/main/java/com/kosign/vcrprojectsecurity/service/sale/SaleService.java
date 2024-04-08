@@ -1,7 +1,6 @@
 package com.kosign.vcrprojectsecurity.service.sale;
 
 
-import com.kosign.vcrprojectsecurity.common.api.StatusCode;
 import com.kosign.vcrprojectsecurity.domiain.menu.Menu;
 import com.kosign.vcrprojectsecurity.domiain.menu.MenuDetailRepository;
 import com.kosign.vcrprojectsecurity.domiain.menu.MenuRepository;
@@ -14,7 +13,6 @@ import com.kosign.vcrprojectsecurity.domiain.table.TableSale;
 import com.kosign.vcrprojectsecurity.domiain.table.TableSaleRepository;
 import com.kosign.vcrprojectsecurity.enums.SaleStatus;
 import com.kosign.vcrprojectsecurity.enums.TableStatus;
-import com.kosign.vcrprojectsecurity.exception.BusinessException;
 import com.kosign.vcrprojectsecurity.exception.EntityNotFoundException;
 import com.kosign.vcrprojectsecurity.payload.sale.SaleDetailRequest;
 import com.kosign.vcrprojectsecurity.payload.sale.SaleDetailResponse;
@@ -54,22 +52,22 @@ public class SaleService implements ISaleService {
     public void createOrder(SaleDetailRequest request) {
         var menu = menuRepository.findById(request.menuId()).orElseThrow(() -> new EntityNotFoundException(Menu.class, "Menu not found"));
         var sale = saleRepository.findById(request.saleId()).orElseThrow(() -> new EntityNotFoundException(Sale.class, "Sale not found"));
-        saleDetailRepository.save(SaleDetail.
-                builder().saleQty((int) request.qty())
-                .salePrice(menu.getPrice()).saleAmount(menu.getPrice().multiply(BigDecimal.valueOf(request.qty())))
-                .menu(menu).sale(sale).build());
-       var totalAmount=saleDetailRepository.getTotalAmount(sale);
-        sale.setSaleTotal(totalAmount);
-        saleRepository.save(sale);
         menu.getMenuDetails().stream().forEach(p -> {
             var stock = stockRepository.findByProduct(p.getProduct());
             if (stock.getNumber() < (p.getTotalUse() * request.qty())) {
-                throw new BusinessException(StatusCode.PRODUCT_NOT_ENOUGH);
+                throw new IllegalArgumentException("Product not enough !!");
             }
             stock.setNumber(stock.getNumber() - (p.getTotalUse() * request.qty()));
             stockRepository.save(stock);
         });
 
+        saleDetailRepository.save(SaleDetail.
+                builder().saleQty((int) request.qty())
+                .salePrice(menu.getPrice()).saleAmount(menu.getPrice().multiply(BigDecimal.valueOf(request.qty())))
+                .menu(menu).sale(sale).build());
+        var totalAmount = saleDetailRepository.getTotalAmount(sale);
+        sale.setSaleTotal(totalAmount);
+        saleRepository.save(sale);
     }
 
     @Override
@@ -83,7 +81,7 @@ public class SaleService implements ISaleService {
                 s -> SaleDetailResponse.builder().id(s.getId()).item(s.getMenu().getName()).QTY(s.getSaleQty())
                         .price(s.getSalePrice()).amount(s.getSaleAmount()).status(s.getStatus()).build()
         ).collect(Collectors.toList());
-        return SaleResponse.builder().tableName(table.getName()).totalAmount(sale.getSaleTotal()).orders(saleDetailResponses).build();
+        return SaleResponse.builder().saleId(sale.getId()).tableName(table.getName()).totalAmount(sale.getSaleTotal()).orders(saleDetailResponses).build();
     }
 
     @Override
