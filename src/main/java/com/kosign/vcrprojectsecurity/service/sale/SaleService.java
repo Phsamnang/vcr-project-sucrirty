@@ -1,6 +1,4 @@
 package com.kosign.vcrprojectsecurity.service.sale;
-
-
 import com.kosign.vcrprojectsecurity.domiain.menu.Menu;
 import com.kosign.vcrprojectsecurity.domiain.menu.MenuDetailRepository;
 import com.kosign.vcrprojectsecurity.domiain.menu.MenuRepository;
@@ -81,7 +79,7 @@ public class SaleService implements ISaleService {
                 s -> SaleDetailResponse.builder().id(s.getId()).item(s.getMenu().getName()).QTY(s.getSaleQty())
                         .price(s.getSalePrice()).amount(s.getSaleAmount()).status(s.getStatus()).build()
         ).collect(Collectors.toList());
-        return SaleResponse.builder().saleId(sale.getId()).tableName(table.getName()).totalAmount(sale.getSaleTotal()).orders(saleDetailResponses).build();
+        return SaleResponse.builder().saleDate(sale.getSaleDate()).saleId(sale.getId()).tableName(table.getName()).totalAmount(sale.getSaleTotal()).orders(saleDetailResponses).build();
     }
 
     @Override
