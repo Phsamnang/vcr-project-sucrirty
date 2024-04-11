@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+
 @RestController
 @RequestMapping("api/v1")
 @RequiredArgsConstructor
@@ -25,6 +27,17 @@ public class SaleController extends VCRRestController {
         return ok();
     }
 
+    @PatchMapping("/table/{tableName}")
+    public ResponseEntity<?> finishOrder(@PathVariable("tableName") String name) {
+        service.finishOrder(name);
+        return ok();
+    }
+
+    @PutMapping("/sale/{id}")
+    public ResponseEntity<?> salePayment(@PathVariable("id") Long id, @RequestParam("money") BigDecimal money) {
+        service.salePayment(id, money);
+        return ok();
+    }
     @GetMapping("/sale/table/{id}")
     public ResponseEntity<?> getSaleBYTable(@PathVariable("id") Long tableId) {
         return ok(service.getSaleByTable(tableId));

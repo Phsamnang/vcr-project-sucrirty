@@ -35,7 +35,6 @@ public class ImportProductService implements IImportProductService {
     public void createImportProduct() {
         var email = AuthHelper.getUsername();
         var user = userRepository.findByEmail(email).get();
-
         importProductRepository.save(ImportProduct.builder().user(user).build());
     }
 

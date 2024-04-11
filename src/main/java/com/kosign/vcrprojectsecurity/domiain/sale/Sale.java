@@ -1,6 +1,4 @@
 package com.kosign.vcrprojectsecurity.domiain.sale;
-
-
 import com.kosign.vcrprojectsecurity.domiain.table.TableSale;
 import com.kosign.vcrprojectsecurity.domiain.user.User;
 import com.kosign.vcrprojectsecurity.enums.SaleStatus;
@@ -10,12 +8,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
 @Entity
 @Table(name = "tbSale")
 @Getter

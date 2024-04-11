@@ -9,9 +9,11 @@ import com.kosign.vcrprojectsecurity.domiain.sale.SaleRepository;
 import com.kosign.vcrprojectsecurity.domiain.stock.StockRepository;
 import com.kosign.vcrprojectsecurity.domiain.table.TableSale;
 import com.kosign.vcrprojectsecurity.domiain.table.TableSaleRepository;
+import com.kosign.vcrprojectsecurity.domiain.user.UserRepository;
 import com.kosign.vcrprojectsecurity.enums.SaleStatus;
 import com.kosign.vcrprojectsecurity.enums.TableStatus;
 import com.kosign.vcrprojectsecurity.exception.EntityNotFoundException;
+import com.kosign.vcrprojectsecurity.helper.AuthHelper;
 import com.kosign.vcrprojectsecurity.payload.sale.SaleDetailRequest;
 import com.kosign.vcrprojectsecurity.payload.sale.SaleDetailResponse;
 import com.kosign.vcrprojectsecurity.payload.sale.SaleRequest;
@@ -32,6 +34,7 @@ public class SaleService implements ISaleService {
     private final SaleDetailRepository saleDetailRepository;
     private final StockRepository stockRepository;
     private final MenuDetailRepository menuDetailRepository;
+    private final UserRepository userRepository;
 
     @Override
     public void createSale(SaleRequest request) {
@@ -70,8 +73,9 @@ public class SaleService implements ISaleService {
 
     @Override
     public SaleResponse getSaleByTable(Long tableId) {
-        var table=tableSaleRepository.findById(tableId).orElseThrow(()->new EntityNotFoundException(TableSale.class,"Table not found"));
-        var sale=saleRepository.findByTableSaleAndStatus(table, SaleStatus.UNPAID.toString());
+        //var table=tableSaleRepository.findById(tableId).orElseThrow(()->new EntityNotFoundException(TableSale.class,"Table not found"));
+        var sa = saleRepository.findByTableSale_IdAndStatus(tableId);
+        var sale = saleRepository.findByTableSale_IdAndTableSale_Status(tableId, TableStatus.UNAVAILABLE.toString(), sa.getId());
         if (sale == null) {
             return null;
         }
@@ -79,7 +83,7 @@ public class SaleService implements ISaleService {
                 s -> SaleDetailResponse.builder().id(s.getId()).item(s.getMenu().getName()).QTY(s.getSaleQty())
                         .price(s.getSalePrice()).amount(s.getSaleAmount()).status(s.getStatus()).build()
         ).collect(Collectors.toList());
-        return SaleResponse.builder().saleDate(sale.getSaleDate()).saleId(sale.getId()).tableName(table.getName()).totalAmount(sale.getSaleTotal()).orders(saleDetailResponses).build();
+        return SaleResponse.builder().status(sale.getStatus()).cashier(sale.getUser() == null ? "" : sale.getUser().getLastName()).saleDate(sale.getSaleDate()).saleId(sale.getId()).tableName(sale.getTableSale().getName()).totalAmount(sale.getSaleTotal()).orders(saleDetailResponses).build();
     }
 
     @Override
@@ -98,5 +102,29 @@ public class SaleService implements ISaleService {
         }
 
 
+    }
+
+    @Override
+    public void finishOrder(String tableName) {
+        var table = tableSaleRepository.findByName(tableName);
+        table.setStatus(TableStatus.AVAILABLE.toString());
+        tableSaleRepository.save(table);
+    }
+
+    @Override
+    public void salePayment(Long id, BigDecimal money) {
+        String email = AuthHelper.getUsername();
+        var sale = saleRepository.findById(id).get();
+        if (money.compareTo(sale.getSaleTotal()) < 0) {
+            throw new IllegalArgumentException("Not enough money for payment...!");
+        }
+        if (sale.getStatus().equals(SaleStatus.PAID.toString())) {
+            throw new IllegalArgumentException("Already paid...!");
+        }
+        var user = userRepository.findByEmail(email);
+        sale.setReceiveMoney(money);
+        sale.setStatus(SaleStatus.PAID.toString());
+        sale.setUser(user.get());
+        saleRepository.save(sale);
     }
 }
