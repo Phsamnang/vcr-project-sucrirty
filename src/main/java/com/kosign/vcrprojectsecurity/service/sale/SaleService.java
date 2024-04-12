@@ -74,8 +74,8 @@ public class SaleService implements ISaleService {
     @Override
     public SaleResponse getSaleByTable(Long tableId) {
         //var table=tableSaleRepository.findById(tableId).orElseThrow(()->new EntityNotFoundException(TableSale.class,"Table not found"));
-        var sa = saleRepository.findByTableSale_IdAndStatus(tableId);
-        var sale = saleRepository.findByTableSale_IdAndTableSale_Status(tableId, TableStatus.UNAVAILABLE.toString(), sa.getId());
+       // var sa = saleRepository.findByTableSale_IdAndStatus(tableId);
+        var sale = saleRepository.findByTableSale_IdAndTableSale_Status(tableId, TableStatus.UNAVAILABLE.toString());
         if (sale == null) {
             return null;
         }
@@ -83,7 +83,12 @@ public class SaleService implements ISaleService {
                 s -> SaleDetailResponse.builder().id(s.getId()).item(s.getMenu().getName()).QTY(s.getSaleQty())
                         .price(s.getSalePrice()).amount(s.getSaleAmount()).status(s.getStatus()).build()
         ).collect(Collectors.toList());
-        return SaleResponse.builder().status(sale.getStatus()).cashier(sale.getUser() == null ? "" : sale.getUser().getLastName()).saleDate(sale.getSaleDate()).saleId(sale.getId()).tableName(sale.getTableSale().getName()).totalAmount(sale.getSaleTotal()).orders(saleDetailResponses).build();
+        return SaleResponse.builder().status(sale.getStatus()).cashier(sale.getUser() == null ? "" : sale.getUser().getLastName())
+                .saleDate(sale.getSaleDate())
+                .saleId(sale.getId())
+                .tableName(sale.getTableSale().getName())
+                .totalAmount(sale.getSaleTotal())
+                .orders(saleDetailResponses).build();
     }
 
     @Override

@@ -4,5 +4,5 @@ import lombok.Builder;
 
 import java.math.BigDecimal;
 @Builder
-public record ImportDetailResponse(String productName, double QTY, BigDecimal price,BigDecimal amount) {
+public record ImportDetailResponse(String productName,String category, double QTY, BigDecimal price,BigDecimal amount) {
 }

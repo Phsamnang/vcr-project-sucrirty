@@ -41,7 +41,7 @@ public class CategoryService implements ICategoryService {
     public MainCategoryResponse getCategoryById(Long id) {
         var category = repository.findById(id).orElseThrow(() -> new EntityNotFoundException(Category.class, "id", id.toString()));
         List<ProductResponse> productResponses = category.getProducts().stream()
-                .filter(product -> product.getIsAvailable()).map(product -> ProductResponse.builder().productName(product.getName())
+                .map(product -> ProductResponse.builder().productName(product.getName())
                         .productId(product.getId())
                         .categoryName(product.getCategory().getName()).build()).collect(Collectors.toList());
         return MainCategoryResponse

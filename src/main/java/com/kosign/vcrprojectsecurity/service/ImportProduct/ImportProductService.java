@@ -83,8 +83,13 @@ public class ImportProductService implements IImportProductService {
         List<ImportDetailResponse> importDetailResponses = imp.getImportDetails().stream().map(i -> ImportDetailResponse.builder().productName(i.getProduct().getName())
                 .price(i.getImportPrice())
                 .QTY(i.getImportQty())
+                .category(i.getProduct().getCategory().getName())
                 .amount(i.getAmount()).build()).collect(Collectors.toList());
         return ImportDetailMainResponse.builder()
-                .importId(imp.getId()).usdTotal(imp.getImportUsdTotal()).importTotal(imp.getImportTotal()).importDetails(importDetailResponses).build();
+                .importId(imp.getId())
+                .usdTotal(imp.getImportUsdTotal())
+                .importTotal(imp.getImportTotal())
+                .importDetails(importDetailResponses)
+                .build();
     }
 }
