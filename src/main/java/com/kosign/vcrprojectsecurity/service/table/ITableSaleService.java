@@ -10,4 +10,6 @@ public interface ITableSaleService {
     void createTable(TableRequest request) throws Throwable;
 
     List<TableResponse> getAllTable();
+
+    TableResponse getTableById(Long id);
 }

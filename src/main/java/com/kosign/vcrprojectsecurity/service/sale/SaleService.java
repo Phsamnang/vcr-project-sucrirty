@@ -42,16 +42,36 @@ public class SaleService implements ISaleService {
         if (table.getStatus().equals(TableStatus.UNAVAILABLE.toString())) {
             throw new IllegalArgumentException("This table is using");
         }
-        saleRepository.save(
+        /*saleRepository.save(
                 Sale.builder().tableSale(table).build()
-        );
+        );*/
         table.setStatus(TableStatus.UNAVAILABLE.toString());
         tableSaleRepository.save(table);
     }
 
     @Override
     public void createOrder(SaleDetailRequest request) {
+       // System.err.println("object from front end "+request);
         var menu = menuRepository.findById(request.menuId()).orElseThrow(() -> new EntityNotFoundException(Menu.class, "Menu not found"));
+        if (request.saleId() == null) {
+            var table = tableSaleRepository.findById(request.tableId()).get();
+            var sale = saleRepository.save(Sale.builder().tableSale(table).build());
+            menu.getMenuDetails().stream().forEach(p -> {
+                var stock = stockRepository.findByProduct(p.getProduct());
+                if (stock.getNumber() < (p.getTotalUse() * request.qty())) {
+                    throw new IllegalArgumentException("Product not enough !!");
+                }
+                stock.setNumber(stock.getNumber() - (p.getTotalUse() * request.qty()));
+                stockRepository.save(stock);
+            });
+            saleDetailRepository.save(SaleDetail.
+                    builder().saleQty((int) request.qty())
+                    .salePrice(menu.getPrice()).saleAmount(menu.getPrice().multiply(BigDecimal.valueOf(request.qty())))
+                    .menu(menu).sale(sale).build());
+            var totalAmount = saleDetailRepository.getTotalAmount(sale);
+            sale.setSaleTotal(totalAmount);
+            saleRepository.save(sale);
+        }
         var sale = saleRepository.findById(request.saleId()).orElseThrow(() -> new EntityNotFoundException(Sale.class, "Sale not found"));
         menu.getMenuDetails().stream().forEach(p -> {
             var stock = stockRepository.findByProduct(p.getProduct());

@@ -1,8 +1,10 @@
 package com.kosign.vcrprojectsecurity.service.table;
 
 
+import com.kosign.vcrprojectsecurity.common.api.StatusCode;
 import com.kosign.vcrprojectsecurity.domiain.table.TableSale;
 import com.kosign.vcrprojectsecurity.domiain.table.TableSaleRepository;
+import com.kosign.vcrprojectsecurity.exception.BusinessException;
 import com.kosign.vcrprojectsecurity.payload.table.TableRequest;
 import com.kosign.vcrprojectsecurity.payload.table.TableResponse;
 import lombok.RequiredArgsConstructor;
@@ -33,5 +35,11 @@ public class TableSaleService implements ITableSaleService{
                     .name(table.getName()).id(table.getId()).build();
         }).collect(Collectors.toList());
         return responses;
+    }
+
+    @Override
+    public TableResponse getTableById(Long id) {
+        var table = tableSaleRepository.findById(id).orElseThrow(() -> new BusinessException(StatusCode.NOT_FOUND));
+        return TableResponse.builder().id(table.getId()).status(table.getStatus()).name(table.getName()).build();
     }
 }

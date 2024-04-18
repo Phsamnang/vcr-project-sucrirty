@@ -21,4 +21,9 @@ public class TableSaleController extends VCRRestController{
 
         return ok(service.getAllTable());
     }
+    @GetMapping("/table/{id}")
+    public ResponseEntity<?>getTableById(@PathVariable Long id) {
+
+        return ok(service.getTableById(id));
+    }
 }
