@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://18.138.255.183:5432/postgres
-    username: postgres
-    password: 12345
+    url: jdbc:postgresql://ep-blue-glade-a1sipxde-pooler.ap-southeast-1.aws.neon.tech:5432/vrc_database
+    username: default
+    password: NG6LO2QDhZPr
   jpa:
     hibernate:
       ddl-auto: update
