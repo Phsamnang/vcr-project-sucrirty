@@ -37,7 +37,7 @@ public class SaleService implements ISaleService {
     private final UserRepository userRepository;
 
     @Override
-    public void createSale(SaleRequest request) {
+    public void bookingTable(SaleRequest request) {
         var table = tableSaleRepository.findById(request.tableId()).orElseThrow(() -> new EntityNotFoundException(TableSale.class, "Table not found"));
         if (table.getStatus().equals(TableStatus.UNAVAILABLE.toString())) {
             throw new IllegalArgumentException("This table is using");
@@ -71,24 +71,23 @@ public class SaleService implements ISaleService {
             var totalAmount = saleDetailRepository.getTotalAmount(sale);
             sale.setSaleTotal(totalAmount);
             saleRepository.save(sale);
-        }
-        var sale = saleRepository.findById(request.saleId()).orElseThrow(() -> new EntityNotFoundException(Sale.class, "Sale not found"));
-        menu.getMenuDetails().stream().forEach(p -> {
-            var stock = stockRepository.findByProduct(p.getProduct());
-            if (stock.getNumber() < (p.getTotalUse() * request.qty())) {
-                throw new IllegalArgumentException("Product not enough !!");
-            }
-            stock.setNumber(stock.getNumber() - (p.getTotalUse() * request.qty()));
-            stockRepository.save(stock);
-        });
+        } else {
+            var sale = saleRepository.findById(request.saleId()).orElseThrow(() -> new EntityNotFoundException(Sale.class, "Sale not found"));
+            menu.getMenuDetails().stream().forEach(p -> {
+                var stock = stockRepository.findByProduct(p.getProduct());
+                if (stock.getNumber() < (p.getTotalUse() * request.qty())) {
+                    throw new IllegalArgumentException("Product not enough !!");
+                }
+                stock.setNumber(stock.getNumber() - (p.getTotalUse() * request.qty()));
+                stockRepository.save(stock);
+            });
 
-        saleDetailRepository.save(SaleDetail.
-                builder().saleQty((int) request.qty())
-                .salePrice(menu.getPrice()).saleAmount(menu.getPrice().multiply(BigDecimal.valueOf(request.qty())))
-                .menu(menu).sale(sale).build());
-        var totalAmount = saleDetailRepository.getTotalAmount(sale);
-        sale.setSaleTotal(totalAmount);
-        saleRepository.save(sale);
+            saleDetailRepository.save(SaleDetail.builder().saleQty((int) request.qty()).salePrice(menu.getPrice()).saleAmount(menu.getPrice().multiply(BigDecimal.valueOf(request.qty()))).menu(menu).sale(sale).build());
+            var totalAmount = saleDetailRepository.getTotalAmount(sale);
+            sale.setSaleTotal(totalAmount);
+            saleRepository.save(sale);
+        }
+
     }
 
     @Override

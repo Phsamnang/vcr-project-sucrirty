@@ -8,7 +8,7 @@ import com.kosign.vcrprojectsecurity.payload.sale.SaleResponse;
 import java.math.BigDecimal;
 
 public interface ISaleService {
-    void createSale(SaleRequest request);
+    void bookingTable(SaleRequest request);
 
     void createOrder(SaleDetailRequest request);
     SaleResponse getSaleByTable(Long tableId);

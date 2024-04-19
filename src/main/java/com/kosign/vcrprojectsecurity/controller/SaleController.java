@@ -16,8 +16,8 @@ public class SaleController extends VCRRestController {
     private final ISaleService service;
 
     @PostMapping("/sale")
-    public ResponseEntity<?> createSale(@RequestBody SaleRequest request) {
-        service.createSale(request);
+    public ResponseEntity<?> bookingTable(@RequestBody SaleRequest request) {
+        service.bookingTable(request);
         return ok();
     }
 
