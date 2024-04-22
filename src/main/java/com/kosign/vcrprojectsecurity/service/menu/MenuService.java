@@ -60,6 +60,7 @@ public class MenuService implements IMenuService {
         List<MenuResponse> responses = menus.stream().filter(m -> m.getCategory().getId() == id)
                 .map(m -> {
                     return MenuResponse.builder()
+                            .id(m.getId())
                             .category(m.getCategory().getName())
                             .name(m.getName())
                             .rielPrice(m.getPrice())

@@ -25,7 +25,6 @@ public class ProductController extends VCRRestController {
         service.updateImageProduct(id, file);
         return ok();
     }
-
     @GetMapping("/products")
     public ResponseEntity<?> getAllProducts() {
         return ok(service.getAllProducts());
@@ -35,4 +34,10 @@ public class ProductController extends VCRRestController {
         service.productPrice(request);
         return ok();
     }
+
+    @GetMapping("/product/{cate_id}")
+    public ResponseEntity<?>getProductByCategoryId(@PathVariable("cate_id") Long id){
+        return ok(service.getProductByCategory(id));
+    }
+
 }

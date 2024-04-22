@@ -73,5 +73,14 @@ public class ProductService implements IProductService {
         p.setPrice(usdPrice);
         repository.save(p);
     }
+
+    @Override
+    public ProductResponse getProductByCategory(Long id) {
+        var product=repository.getProductByCategoryId(id);
+        System.err.println(" prodfsdfas "+product);
+        return ProductResponse.builder()
+                .productName(product.getName())
+                .productId(product.getId()).build();
+    }
 }
 

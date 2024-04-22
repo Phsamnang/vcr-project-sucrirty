@@ -2,10 +2,7 @@ package com.kosign.vcrprojectsecurity.domiain.product;
 
 import com.kosign.vcrprojectsecurity.domiain.category.Category;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 
@@ -13,6 +10,7 @@ import java.math.BigDecimal;
 @Setter
 @NoArgsConstructor
 @Entity
+@ToString
 public class Product {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

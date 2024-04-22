@@ -42,9 +42,9 @@ public class SaleService implements ISaleService {
         if (table.getStatus().equals(TableStatus.UNAVAILABLE.toString())) {
             throw new IllegalArgumentException("This table is using");
         }
-        /*saleRepository.save(
+        saleRepository.save(
                 Sale.builder().tableSale(table).build()
-        );*/
+        );
         table.setStatus(TableStatus.UNAVAILABLE.toString());
         tableSaleRepository.save(table);
     }

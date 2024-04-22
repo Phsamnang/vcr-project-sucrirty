@@ -14,4 +14,6 @@ public interface IProductService {
    List<ProductResponse>getAllProducts();
 
    void productPrice(ProductPriceRequest request);
+
+    ProductResponse getProductByCategory(Long id);
 }
