@@ -1,5 +1,6 @@
 package com.kosign.vcrprojectsecurity.service.menu;
 
+import com.kosign.vcrprojectsecurity.common.api.StatusCode;
 import com.kosign.vcrprojectsecurity.domiain.category.Category;
 import com.kosign.vcrprojectsecurity.domiain.category.CategoryRepository;
 import com.kosign.vcrprojectsecurity.domiain.menu.Menu;
@@ -9,6 +10,7 @@ import com.kosign.vcrprojectsecurity.domiain.menu.MenuRepository;
 import com.kosign.vcrprojectsecurity.domiain.product.Product;
 import com.kosign.vcrprojectsecurity.domiain.product.ProductRepository;
 import com.kosign.vcrprojectsecurity.domiain.stock.StockRepository;
+import com.kosign.vcrprojectsecurity.exception.BusinessException;
 import com.kosign.vcrprojectsecurity.exception.EntityNotFoundException;
 import com.kosign.vcrprojectsecurity.payload.menu.MenuDetailRequest;
 import com.kosign.vcrprojectsecurity.payload.menu.MenuRequest;
@@ -66,6 +68,7 @@ public class MenuService implements IMenuService {
                             .rielPrice(m.getPrice())
                             .usdPrice(m.getUsd())
                             .image(m.getImage())
+                            .isCooking(m.getIsCooking())
                             .build();
                 }).collect(Collectors.toList());
         return responses;
@@ -79,9 +82,17 @@ public class MenuService implements IMenuService {
                     .image(m.getImage())
                     .id(m.getId())
                     .name(m.getName())
+
                     .rielPrice(m.getPrice())
                     .usdPrice(m.getUsd()).build();
         }).collect(Collectors.toList());
         return menuResponses;
+    }
+
+    @Override
+    public void isCooking(Long id) {
+        var menu=menuRepository.findById(id).orElseThrow(()->new BusinessException(StatusCode.NOT_FOUND));
+        menu.setIsCooking(!menu.getIsCooking());
+        menuRepository.save(menu);
     }
 }

@@ -27,6 +27,11 @@ public class MenuController extends VCRRestController{
     public ResponseEntity<?> getMenu(@RequestParam(name = "cate_id", defaultValue = "1") Long id) {
         return ok(service.getMenu(id));
     }
+    @PatchMapping("/menu/{id}")
+    public ResponseEntity<?> isCooking(@PathVariable("id") Long id) {
+        service.isCooking(id);
+        return ok();
+    }
     @GetMapping("/menu-sale")
     public ResponseEntity<?> getMenuSale(@RequestParam(name = "cate_id", defaultValue = "1") Long id) {
         return ok(service.getMenuSale(id));

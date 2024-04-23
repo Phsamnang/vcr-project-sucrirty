@@ -4,5 +4,6 @@ import lombok.Builder;
 
 import java.math.BigDecimal;
 @Builder
-public record MenuResponse(Long id,String name, String category,BigDecimal rielPrice,BigDecimal usdPrice,String image) {
+public record MenuResponse(Long id, String name, String category, BigDecimal rielPrice, BigDecimal usdPrice, String image,
+                           Boolean isCooking) {
 }

@@ -14,4 +14,6 @@ public interface IMenuService {
     List<MenuResponse> getMenu(Long id);
 
     List<MenuResponse> getMenuSale(Long id);
+
+    void isCooking(Long id);
 }
