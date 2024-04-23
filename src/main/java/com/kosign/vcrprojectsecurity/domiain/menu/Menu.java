@@ -24,6 +24,7 @@ public class Menu {
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     private Category category;
     private String name;
+    private Boolean isCooking=false;
     private BigDecimal price;
     private BigDecimal usd;
     private String image;
