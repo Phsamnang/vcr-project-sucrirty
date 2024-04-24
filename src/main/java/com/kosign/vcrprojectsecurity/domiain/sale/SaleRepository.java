@@ -11,7 +11,7 @@ public interface SaleRepository extends JpaRepository<Sale,Long> {
     @Query("select distinct s from Sale s where s.tableSale.id = ?1 and s.tableSale.status = ?2 order by s.id desc limit 1")
     Sale findByTableSale_IdAndTableSale_Status(Long id, String status);
 
-    @Query("select s from Sale s where s.tableSale.id = ?1 order by s.id desc limit 1")
+    @Query("select s from Sale s where s.tableSale.id = ?1 and s.tableSale.status='unavailable' order by s.id desc limit 1")
     Sale findByTableSale_IdAndStatus(Long id);
 
 

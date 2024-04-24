@@ -41,6 +41,9 @@ public class SaleController extends VCRRestController {
     @GetMapping("/sale/table/{id}")
     public ResponseEntity<?> getSaleBYTable(@PathVariable("id") Long tableId) {
         return ok(service.getSaleByTable(tableId));
+    }@GetMapping("/sale/chef")
+    public ResponseEntity<?> getSaleBYTable() {
+        return ok(service.getFoods());
     }
 
     @DeleteMapping("/sale/table/item/{id}")

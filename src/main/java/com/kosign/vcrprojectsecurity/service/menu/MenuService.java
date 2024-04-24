@@ -95,4 +95,5 @@ public class MenuService implements IMenuService {
         menu.setIsCooking(!menu.getIsCooking());
         menuRepository.save(menu);
     }
+
 }

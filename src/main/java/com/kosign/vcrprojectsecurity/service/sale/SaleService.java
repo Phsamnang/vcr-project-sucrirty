@@ -1,4 +1,5 @@
 package com.kosign.vcrprojectsecurity.service.sale;
+
 import com.kosign.vcrprojectsecurity.domiain.menu.Menu;
 import com.kosign.vcrprojectsecurity.domiain.menu.MenuDetailRepository;
 import com.kosign.vcrprojectsecurity.domiain.menu.MenuRepository;
@@ -10,20 +11,21 @@ import com.kosign.vcrprojectsecurity.domiain.stock.StockRepository;
 import com.kosign.vcrprojectsecurity.domiain.table.TableSale;
 import com.kosign.vcrprojectsecurity.domiain.table.TableSaleRepository;
 import com.kosign.vcrprojectsecurity.domiain.user.UserRepository;
+import com.kosign.vcrprojectsecurity.enums.SaleDetailStatus;
 import com.kosign.vcrprojectsecurity.enums.SaleStatus;
 import com.kosign.vcrprojectsecurity.enums.TableStatus;
 import com.kosign.vcrprojectsecurity.exception.EntityNotFoundException;
 import com.kosign.vcrprojectsecurity.helper.AuthHelper;
-import com.kosign.vcrprojectsecurity.payload.sale.SaleDetailRequest;
-import com.kosign.vcrprojectsecurity.payload.sale.SaleDetailResponse;
-import com.kosign.vcrprojectsecurity.payload.sale.SaleRequest;
-import com.kosign.vcrprojectsecurity.payload.sale.SaleResponse;
+import com.kosign.vcrprojectsecurity.payload.sale.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.kosign.vcrprojectsecurity.enums.SaleDetailStatus.COOKING;
+import static com.kosign.vcrprojectsecurity.enums.SaleDetailStatus.WAIT;
 
 @Service
 @RequiredArgsConstructor
@@ -131,6 +133,10 @@ public class SaleService implements ISaleService {
     @Override
     public void finishOrder(String tableName) {
         var table = tableSaleRepository.findByName(tableName);
+        var sale = saleRepository.findByTableSale_IdAndStatus(table.getId());
+        if (sale.getSaleTotal() == null) {
+            saleRepository.deleteById(sale.getId());
+        }
         table.setStatus(TableStatus.AVAILABLE.toString());
         tableSaleRepository.save(table);
     }
@@ -151,4 +157,18 @@ public class SaleService implements ISaleService {
         sale.setUser(user.get());
         saleRepository.save(sale);
     }
+
+    @Override
+    public List<ChefFoodResponse> getFoods() {
+        var foods = saleDetailRepository.findByMenu_IsCooking(true);
+        List<ChefFoodResponse> responses = foods.stream().filter(f -> f.getStatus().equals(SaleDetailStatus.WAIT.toString()) || f.getStatus().equals(SaleDetailStatus.COOKING.toString())).map(f -> {
+            return ChefFoodResponse.builder().name(f.getMenu().getName())
+                    .qty(f.getSaleQty())
+                    .table(f.getSale().getTableSale().getName())
+                    .status(f.getStatus()).build();
+        }).collect(Collectors.toList());
+        return responses;
+    }
+
+
 }

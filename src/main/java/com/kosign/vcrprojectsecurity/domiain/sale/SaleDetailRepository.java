@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Repository
 public interface SaleDetailRepository extends JpaRepository<SaleDetail,Long> {
@@ -18,4 +19,6 @@ public interface SaleDetailRepository extends JpaRepository<SaleDetail,Long> {
     @Modifying
     @Query("delete from SaleDetail s where s.id = ?1")
     int removeById(Long id);
+
+    List<SaleDetail> findByMenu_IsCooking(Boolean isCooking);
 }

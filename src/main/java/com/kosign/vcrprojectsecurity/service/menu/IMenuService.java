@@ -16,4 +16,6 @@ public interface IMenuService {
     List<MenuResponse> getMenuSale(Long id);
 
     void isCooking(Long id);
+
+
 }
